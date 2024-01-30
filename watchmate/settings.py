@@ -29,6 +29,16 @@
 		CRUD = PUT, GET, PUT, DELETE
 	2.3.Headers - status codes
 	2.4.The Data/Body - JSON/XMLddd for both sides transfer
+3. Serialization and Deserialization:
+    - Serialization - converting complex data type(Model Object) to python native data type(python dict)
+    is known as serialiation
+    - JSON DATA ---parse data---> Python Native Data Type ---deserialize---> complex data type
+    3.1.Types of Serializers:
+        - serializers.Serializer
+        - serializers.ModelSerializer
+    3.2.Types of Views:
+        - CBV - utilize (APIView)
+        - FBV - utilize @api_view
 """
 
 from pathlib import Path
@@ -48,6 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
 
     'watchlist_app',
 ]
