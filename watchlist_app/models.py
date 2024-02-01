@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # class Movie(models.Model):
@@ -46,6 +47,12 @@ class WatchList(models.Model):
     active = models.BooleanField(
         default=True,
     )
+    average_rating = models.FloatField(
+        default=0,
+    )
+    number_rating = models.PositiveIntegerField(
+        default=0,
+    )
     created = models.DateTimeField(
         auto_now_add=True,
     )
@@ -55,6 +62,10 @@ class WatchList(models.Model):
 
 
 class Review(models.Model):
+    review_user = models.ForeignKey( #add it into serializer
+        User,
+        on_delete=models.CASCADE,
+    )
     rating = models.PositiveIntegerField(
         validators=[
             MinValueValidator(1),

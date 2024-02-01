@@ -8,30 +8,37 @@ from watchlist_app.models import (WatchList, StreamPlatform, Review)
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    review_user = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Review
         fields = "__all__"
+
 
 class WatchListSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)
     class Meta:
         model = WatchList
+        # exclude = ('watchlist',) # do this because when we create comment for movie we do not need to pass the name of the movie
+        #Error: Watchlist is required
         fields = "__all__"
 
 
+
 class StreamPlatformSerializer(serializers.ModelSerializer):
-    # watchlist = WatchListSerializer(many=True, read_only=True) # take 'watchlist' from related_name
+    watchlist = WatchListSerializer(many=True, read_only=True) # take 'watchlist' from related_name
     # watchlist = serializers.StringRelatedField(many=True) #if we want to show only what is in __str__
     # watchlist = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    watchlist = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='watch-details', #take it from urls.py
-    )
+    # watchlist = serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='streamplatform-details', #take it from urls.py
+    #     lookup_field='id',
+    # )
 
     class Meta:
         model = StreamPlatform
         fields = "__all__"
+
 
 # class MovieSerializer(serializers.ModelSerializer):
 #     len_name = serializers.SerializerMethodField()
