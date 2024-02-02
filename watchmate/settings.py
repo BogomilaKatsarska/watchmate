@@ -39,6 +39,13 @@
     3.2.Types of Views:
         - CBV - utilize (APIView)
         - FBV - utilize @api_view
+4.Postman: GET request with authentication required:
+    Headers -> Tick -> Authorization -> value: Basic user:pass (convert to Base64 format)
+5.Token: Authorization -> passed in Headers -> Token:value of token
+    - POST request to 127.0.0.1:8000/account/login
+    BODY(form data):
+    username bogomila
+    password 123
 """
 
 from pathlib import Path
@@ -60,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
 
     'watchlist_app',
 ]
@@ -139,8 +147,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #BASIC Authentication - for test purposes
 REST_FRAMEWORK = {
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.BasicAuthentication',
+    #     # 'rest_framework.authentication.SessionAuthentication',
+    # ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ]
 }

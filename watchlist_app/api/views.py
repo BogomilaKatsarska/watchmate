@@ -6,7 +6,7 @@ from rest_framework.response import Response
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 
-from watchlist_app.api.permissions import AdminOrReadOnly, ReviewUserOrReadOnly
+from watchlist_app.api.permissions import IsReviewUserOrReadOnly, IsAdminOrReadOnly
 from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer, \
     ReviewSerializer  # , MovieSerializer
 from watchlist_app.models import WatchList, StreamPlatform, Review
@@ -15,6 +15,7 @@ from watchlist_app.models import WatchList, StreamPlatform, Review
 
 class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Review.objects.all()
@@ -42,7 +43,7 @@ class ReviewCreate(generics.CreateAPIView):
 class ReviewList(generics.ListAPIView):
     # queryset = Review.objects.all() remove this queryset and overwrite it as we need comments for specific watch
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         pk = self.kwargs['pk']
@@ -52,7 +53,7 @@ class ReviewList(generics.ListAPIView):
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [ReviewUserOrReadOnly]
+    permission_classes = [IsReviewUserOrReadOnly]
 
 # class ReviewDetail(mixins.RetrieveModelMixin, generics.GenericAPIView):
 #     queryset = Review.objects.all()
@@ -73,6 +74,7 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 class StreamPlatformVS(viewsets.ModelViewSet): #ReadOnlyModelViewSetd
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 # class StreamPlatformVS(viewsets.ViewSet):
 #
@@ -96,6 +98,7 @@ class StreamPlatformVS(viewsets.ModelViewSet): #ReadOnlyModelViewSetd
 #             return Response(serializer.errors)
 
 class StreamPlatformAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
         platform = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platform, many=True, context={'request': request}) #,context={'request': request}) #we do the 'request' because of HyperLinkRelatedField
@@ -110,6 +113,7 @@ class StreamPlatformAV(APIView):
             return Response(serializer.errors)
 
 class StreamPlatformDetailAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request, pk):
             try:
                 platform = StreamPlatform.objects.get(pk=pk)
@@ -134,6 +138,7 @@ class StreamPlatformDetailAV(APIView):
 
 
 class WatchListAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
@@ -149,6 +154,7 @@ class WatchListAV(APIView):
 
 
 class WatchDetailAV(APIView):
+    permission_classes = [IsAdminOrReadOnly]
     def get(self, request, pk):
         try:
             movie = WatchList.objects.get(pk=pk)

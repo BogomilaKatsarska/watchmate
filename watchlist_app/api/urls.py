@@ -23,7 +23,7 @@ urlpatterns = [
     path('', include(router.urls)),
     # path('review/', ReviewList.as_view(), name='review-detail'),
     # path('review/<int:pk>/', ReviewDetail.as_view(), name='review-detail'),
-    path('<int:pk>/review-create/', ReviewCreate.as_view(), name='review-list'), # create a review for specific watch
+    path('<int:pk>/review-create/', ReviewCreate.as_view(), name='review-create'), # create a review for specific watch
     path('<int:pk>/reviews/', ReviewList.as_view(), name='review-list'),
     path('review/<int:pk>/', ReviewDetail.as_view(), name='review-detail'),
  ]

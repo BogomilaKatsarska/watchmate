@@ -7,5 +7,6 @@ urlpatterns = [
     # path('movie/', include('watchlist_app.urls')),
     path('watch/', include('watchlist_app.api.urls')),
     #Temporary LogIn Form
-    path('api-auth/', include('rest_framework.urls'))
+    # path('api-auth/', include('rest_framework.urls'))
+    path('account/', include('user_app.api.urls')),
 ]
