@@ -6,7 +6,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
 
     class Meta:
-        models = User
+        model = User
         fields = ['username', 'email', 'password', 'password2']
         extra_kwargs = {
             'password': {'write_only': True}
@@ -19,7 +19,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         if password != password2:
             raise serializers.ValidationError({'Error': 'P1 and P2 should be the same'})
 
-        if User.objects.filter(emil=self.validated_data['email']).exists():
+        if User.objects.filter(email=self.validated_data['email']).exists():
             raise serializers.ValidationError({'Error': 'Email already exists'})
 
         account = User(email=self.validated_data['email'], username=self.validated_data['username'])
