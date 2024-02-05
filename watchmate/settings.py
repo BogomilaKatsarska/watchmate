@@ -46,6 +46,26 @@
     BODY(form data):
     username bogomila
     password 123
+6. JWT.io
+    - simple jwt
+    pip install djangorestframework-simplejwt
+    - Access Token(short term - lives for 15min) and Refresh Token(long term token - valid for 24hours)  - Both of them
+    are generated automatically and not stored in our DB
+    - The load on DB is decreased
+    - local storage of AT and RT on client side
+    - STRUCTURE of JTW:
+        - in 3parts - header.payload(data).signature(how this token is encoded)
+    - disadvantage: caching information
+7. Throttling: restrict user according to the number of requests they send:
+    - AnonRate Trottle - for anonymous user
+    - UserRate Trottle - for registered user
+    - ScopeRate Throttle
+8. Filtering:
+    - according to brand, price, rating (get_queryset)
+    - accorting to search(i.e.L laptop on Amazon)
+    - ordering
+
+    django filter package - pip install django-filter
 """
 
 from pathlib import Path
@@ -68,6 +88,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters', #Django Filtering will only work for Generic API Views
 
     'watchlist_app',
 ]
@@ -147,11 +168,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #BASIC Authentication - for test purposes
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.BasicAuthentication',
-    #     # 'rest_framework.authentication.SessionAuthentication',
+    # 'DEFAULT_THROTTLE_CLASSES': [
+    #     'rest_framework.throttling.AnonRateThrottle',
+    #     'rest_framework.throttling.UserRateThrottle'
     # ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '300/day',
+        'review-create': '100/day',
+        'review-list': '1000/day',
+        'review-detail': '200/day',
+    },
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
+        #     'rest_framework.authentication.BasicAuthentication',
+        #     'rest_framework.authentication.SessionAuthentication',
+         'rest_framework.authentication.TokenAuthentication',],
+         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+            'PAGE_SIZE': 1,
 }
+
+# SIMPLE_JWT = {
+#     # automatically save the access token when refreshed with refresh token
+#     'ROTATE_REFRESH_TOKEN': True,
+# }

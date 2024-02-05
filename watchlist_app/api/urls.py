@@ -3,7 +3,8 @@ from rest_framework.routers import DefaultRouter
 
 from watchlist_app.api.views import (ReviewList, ReviewDetail, WatchListAV,
                                      WatchDetailAV, StreamPlatformAV,
-                                     StreamPlatformDetailAV, ReviewCreate, StreamPlatformVS)
+                                     StreamPlatformDetailAV, ReviewCreate, StreamPlatformVS, UserReview,
+                                     WatchListGV)
 
 # from watchlist_app.views import movie_list, movie_details
 # from watchlist_app.api.views import MovieDetailAV, MovieListAV
@@ -18,6 +19,7 @@ urlpatterns = [
     # path('<int:pk>/', MovieDetailAV.as_view(), name='movie-details'),
     path('list/', WatchListAV.as_view(), name='movie-list'),
     path('<int:pk>/', WatchDetailAV.as_view(), name='movie-details'),
+    path('list2/', WatchListGV.as_view(), name='watch-details'),
     # path('stream/', StreamPlatformAV.as_view(), name='stream-list'), #We comment this URL and the one below becuase of the router
     # path('stream/<int:pk>/', StreamPlatformDetailAV.as_view(), name='stream-details'),
     path('', include(router.urls)),
@@ -26,4 +28,6 @@ urlpatterns = [
     path('<int:pk>/review-create/', ReviewCreate.as_view(), name='review-create'), # create a review for specific watch
     path('<int:pk>/reviews/', ReviewList.as_view(), name='review-list'),
     path('review/<int:pk>/', ReviewDetail.as_view(), name='review-detail'),
- ]
+    # path('reviews/<str:username>/', UserReview.as_view(), name='user-review-detail'),
+    path('reviews/', UserReview.as_view(), name='user-review-detail'), #/?username=hristo-pc
+]

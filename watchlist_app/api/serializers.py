@@ -15,7 +15,8 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class WatchListSerializer(serializers.ModelSerializer):
-    reviews = ReviewSerializer(many=True, read_only=True)
+    # reviews = ReviewSerializer(many=True, read_only=True)
+    platform = serializers.CharField(source='platform.name') # in order not to show the id of the platform but the name itself
     class Meta:
         model = WatchList
         # exclude = ('watchlist',) # do this because when we create comment for movie we do not need to pass the name of the movie
