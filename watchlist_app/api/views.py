@@ -6,6 +6,8 @@ from rest_framework.response import Response
 # from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
+
+from watchlist_app.api.pagination import WatchListPagination, WatchlistCPagination
 from watchlist_app.api.permissions import IsReviewUserOrReadOnly, IsAdminOrReadOnly
 from watchlist_app.api.serializers import WatchListSerializer, StreamPlatformSerializer, \
     ReviewSerializer  # , MovieSerializer
@@ -164,8 +166,9 @@ class WatchListGV(generics.ListAPIView):
     # filter_backends = [DjangoFilterBackend] #we need to clarify which fields we want to filter # EXACT SEARCH ONLY !
     # filter_backends = [filters.SearchFilter]
     # search_fields = ['=title', 'platform__name'] #/search=hristo-pc
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['avg_rating',]
+    # filter_backends = [filters.OrderingFilter]
+    # ordering_fields = ['avg_rating',]
+    pagination_class = WatchlistCPagination
 
 class WatchListAV(APIView):
     permission_classes = [IsAdminOrReadOnly]
